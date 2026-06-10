@@ -1,4 +1,5 @@
 using AutoMapper;
+using LibraryApp.API.Middleware;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Application.Mappings;
 using LibraryApp.Application.Services;
@@ -81,6 +82,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -89,7 +93,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
