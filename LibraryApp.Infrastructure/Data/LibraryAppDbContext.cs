@@ -16,8 +16,9 @@ namespace LibraryApp.Infrastructure.Data
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Member> Members { get; set; }
-
         public DbSet<Loan> Loans { get; set; }
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Role> Roles => Set<Role>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

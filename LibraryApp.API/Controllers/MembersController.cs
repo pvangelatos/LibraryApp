@@ -1,12 +1,14 @@
 ﻿using LibraryApp.Application.DTOs.Book;
 using LibraryApp.Application.DTOs.Member;
 using LibraryApp.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _memberService;

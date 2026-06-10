@@ -2,6 +2,7 @@
 using LibraryApp.Application.DTOs.Member;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace LibraryApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class LoansController : ControllerBase
     {
         private readonly ILoanService _loanService;
