@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.DTOs.Book;
+﻿using FluentValidation;
+using LibraryApp.Application.DTOs.Book;
 using LibraryApp.Application.DTOs.Member;
 using LibraryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,12 @@ namespace LibraryApp.API.Controllers
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _memberService;
+        private readonly IValidator<MemberCreateDto> _validator;
 
-        public MembersController(IMemberService memberService)
+        public MembersController(IMemberService memberService, IValidator<MemberCreateDto> validator)
         {
             _memberService = memberService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -39,6 +42,10 @@ namespace LibraryApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMember([FromBody] MemberCreateDto memberCreateDto)
         {
+            var validation = await _validator.ValidateAsync(memberCreateDto);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors);
+
             var createdMember = await _memberService.CreateAsync(memberCreateDto);
             return CreatedAtAction(nameof(GetMemberById), new { id = createdMember.Id }, createdMember);
         }
@@ -46,6 +53,10 @@ namespace LibraryApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMember(int id, [FromBody] MemberCreateDto memberCreateDto)
         {
+            var validation = await _validator.ValidateAsync(memberCreateDto);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors);
+
             var updatedMember = await _memberService.UpdateAsync(id, memberCreateDto);
             return Ok(updatedMember);
         }

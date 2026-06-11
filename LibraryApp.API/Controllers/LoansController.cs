@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.DTOs.Loan;
+﻿using FluentValidation;
+using LibraryApp.Application.DTOs.Loan;
 using LibraryApp.Application.DTOs.Member;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Application.Services;
@@ -14,11 +15,13 @@ namespace LibraryApp.API.Controllers
     public class LoansController : ControllerBase
     {
         private readonly ILoanService _loanService;
+        private readonly IValidator<LoanCreateDto> _validator;
 
-        public LoansController(ILoanService loanService)
+        public LoansController(ILoanService loanService, IValidator<LoanCreateDto> validator)
         {
             _loanService = loanService;
-        }   
+            _validator = validator;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllLoans()
@@ -48,6 +51,10 @@ namespace LibraryApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLoan([FromBody] LoanCreateDto loanCreateDto)
         {
+            var validation = await _validator.ValidateAsync(loanCreateDto);
+            if (validation == null)
+                return BadRequest("Validation failed");
+
             var createdLoan = await _loanService.CreateLoanAsync(loanCreateDto);
             return CreatedAtAction(nameof(GetLoanById), new { id = createdLoan.Id }, createdLoan);
         }

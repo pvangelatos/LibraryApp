@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.DTOs.Book;
+﻿using FluentValidation;
+using LibraryApp.Application.DTOs.Book;
 using LibraryApp.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace LibraryApp.API.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
-        
-        public BooksController(IBookService bookService)
+        private readonly IValidator<BookCreateDto> _validator;
+
+        public BooksController(IBookService bookService, IValidator<BookCreateDto> validator)
         {
             _bookService = bookService;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -38,6 +41,10 @@ namespace LibraryApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody] BookCreateDto bookCreateDto)
         {
+            var validation = await _validator.ValidateAsync(bookCreateDto);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors);
+
             var createdBook = await _bookService.CreateAsync(bookCreateDto);
             return CreatedAtAction(nameof(GetBookById), new { id = createdBook.Id }, createdBook);
         }
@@ -45,6 +52,10 @@ namespace LibraryApp.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, [FromBody] BookCreateDto bookCreateDto)
         {
+            var validation = await _validator.ValidateAsync(bookCreateDto);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors);
+
             var updatedBook = await _bookService.UpdateAsync(id, bookCreateDto);
             return Ok(updatedBook);
         }

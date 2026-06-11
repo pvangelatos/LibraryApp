@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
+using FluentValidation;
+using LibraryApp.Application.Validators;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -71,6 +73,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddMaps(typeof(BookProfile).Assembly);
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<BookCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<LoanCreateDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<MemberCreateDtoValidator>();
 
 builder.Services.AddAuthentication(options =>
 {
