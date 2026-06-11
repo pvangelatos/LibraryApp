@@ -148,9 +148,14 @@ LibraryApp/
 │       └── Role.cs
 ├── LibraryApp.Application/
 │   ├── DTOs/
+│   │   ├── Auth/
+│   │   ├── Book/
+│   │   ├── Loan/
+│   │   └── Member/
 │   ├── Interfaces/
 │   ├── Mappings/
-│   └── Services/
+│   ├── Services/
+│   └── Validators/
 ├── LibraryApp.Infrastructure/
 │   ├── Data/
 │   │   ├── Configurations/
