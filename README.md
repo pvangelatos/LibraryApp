@@ -22,6 +22,7 @@ LibraryApp.API             → Controllers, Middleware, Program.cs
 - 👥 **Roles** — Admin, Librarian, Member
 - ⚠️ **Global Exception Handler** — Centralized error handling with ProblemDetails (RFC 7807)
 - 📝 **Serilog Logging** — Structured logging to console and file
+- ✅ **FluentValidation** — Input validation for all DTOs with descriptive error messages
 
 ## 🛠️ Tech Stack
 
@@ -35,6 +36,7 @@ LibraryApp.API             → Controllers, Middleware, Program.cs
 | JWT Bearer | Authentication |
 | Serilog | Logging |
 | Swashbuckle (Swagger) | API documentation |
+| FluentValidation | Input validation |
 
 ## 📋 API Endpoints
 
